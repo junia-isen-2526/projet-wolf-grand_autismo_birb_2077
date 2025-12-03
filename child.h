@@ -7,7 +7,9 @@
 #define WOLF__CHILD_H_
 
 typedef struct {
-  // TODO
+  unsigned int y;
+  unsigned int x;
+  unsigned int etat; // 0 = FAUX, 1 = VRAI faut penser à faire attention à qu'il ne va pas au dessus de 1
 } Child;
 
 int isGameOver(GameStep step, Child child, const Wolf *wolf);
