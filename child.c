@@ -9,18 +9,7 @@ int isGameOver(const GameStep step, Child child, const Wolf *wolf) {
   return step == STEP_WOLF_MOVE;
 }
 
-void moveChildStep(Child *child) {
-  if (child->etat != 1) return; //si l'enfant est mort alors return
-char forestMap[FOREST_HEIGHT][FOREST_WIDTH];
-
-  // 8 directions autour enfant
-  int dx[8] = {-1, 0, 1, -1, 1, -1, 0, 1}; // x
-  int dy[8] = {-1,-1,-1,  0, 0,  1, 1, 1}; // y
-
-  int chosen = -1;
-
-  // Vérifie des directions au hasard
-  for (int i = 0; i < 8; i++) {
+void VerifyChildArea(Child *child, char forestMap[40][80], int dx[8], int dy[8], int *chosen) {for (int i = 0; i < 8; i++) {
     int r = rand() % 8; // choix d'une direction aléatoire
 
     int nx = child->x + dx[r];
@@ -32,10 +21,24 @@ char forestMap[FOREST_HEIGHT][FOREST_WIDTH];
 
     // si ce n’est pas un arbre → case valide
     if (forestMap[ny][nx] == ' ') {
-      chosen = r;
+      *chosen = r;
       break;
     }
   }
+}
+
+void moveChildStep(Child *child) {
+   if (child->etat != 1) return; //si l'enfant est mort alors return
+   char forestMap[FOREST_HEIGHT][FOREST_WIDTH];
+
+  // 8 directions autour enfant
+  int dx[8] = {-1, 0, 1, -1, 1, -1, 0, 1}; // x
+  int dy[8] = {-1,-1,-1,  0, 0,  1, 1, 1}; // y
+
+  int chosen = -1;
+
+  // Vérifie des directions au hasard
+  VerifyChildArea(child,forestMap,dx,dy,&chosen);
   // aucune direction libre trouvée
   if (chosen == -1) return;
   // déplacer l’enfant
