@@ -38,7 +38,6 @@ char forestMap[FOREST_HEIGHT][FOREST_WIDTH];
   }
   // aucune direction libre trouvée
   if (chosen == -1) return;
-
   // déplacer l’enfant
   child->x += dx[chosen];
   child->y += dy[chosen];
