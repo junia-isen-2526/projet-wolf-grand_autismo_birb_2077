@@ -21,7 +21,7 @@ Graph *mk_graph();
  * @param graph the pointer towards the graph.
  * @pre @p graph must be not null.
  */
-void del_graph(const Graph *graph);
+void del_graph(Graph *graph);
 
 /**
  * Graph loader from a file. The graph should know the
@@ -42,15 +42,16 @@ Graph *load_graph(FILE file);
  * may turn out... Weird.
  * @pre @p graph must be a valid pointer.
  */
-void add_point(Graph *graph, int x, int y);
+void add_point(Graph *graph, unsigned int x, unsigned int y);
 
 /**
  * Turning our graph into a mermaid string
  * @param graph the graph to transform.
- * @return a mermaid file content ready for output.
+ * @param file the file to which we want to write the graph.
  * @pre @p graph must be a valid pointer.
+ * @pre @p file must be a valid file descriptor to an opened file.
  */
-char *graph2mmd(const Graph *graph);
+void graph2mmd(const Graph *graph, FILE file);
 
 /**
  * @param graph
@@ -59,7 +60,7 @@ char *graph2mmd(const Graph *graph);
  * @return
  * @pre @p graph must be a valid pointer.
  */
-short is_in_graph(const Graph *graph, int x, int y);
+short is_in_graph(const Graph *graph, unsigned int x, unsigned int y);
 
 #endif // WOLF_GRAPH__H
 
