@@ -10,11 +10,36 @@ int isGameOver(const GameStep step, Child child, const Wolf *wolf) {
 }
 
 void moveChildStep(Child *child) {
-  if (child->etat == 1) { //si enfant en vie alors
-    int dx = (rand() % 3) - 1; // direction random x
-    int dy = (rand() % 3) - 1; // direction random y
-    child->x += dx; // nouvelle direction x
-    child->y += dy; // nouvelle direction y
-    //printf("'The Child' se déplace en (%d, %d)\n", child->x, child->y);
+  if (child->etat != 1) return; //si l'enfant est mort alors return
+char forestMap[FOREST_HEIGHT][FOREST_WIDTH];
+
+  // 8 directions autour enfant
+  int dx[8] = {-1, 0, 1, -1, 1, -1, 0, 1}; // x
+  int dy[8] = {-1,-1,-1,  0, 0,  1, 1, 1}; // y
+
+  int chosen = -1;
+
+  // Vérifie des directions au hasard
+  for (int i = 0; i < 8; i++) {
+    int r = rand() % 8; // choix d'une direction aléatoire
+
+    int nx = child->x + dx[r];
+    int ny = child->y + dy[r];
+
+    // limiter à la map
+    if (nx < 0 || ny < 0 || nx >= FOREST_WIDTH || ny >= FOREST_HEIGHT)
+      continue;
+
+    // si ce n’est pas un arbre → case valide
+    if (forestMap[ny][nx] == ' ') {
+      chosen = r;
+      break;
+    }
   }
+  // aucune direction libre trouvée
+  if (chosen == -1) return;
+
+  // déplacer l’enfant
+  child->x += dx[chosen];
+  child->y += dy[chosen];
 }
