@@ -16,8 +16,8 @@ struct st_point {
 typedef struct st_edge Edge;
 
 struct st_edge {
-  Point *a;
-  Point *b;
+  unsigned int a;
+  unsigned int b;
   // linked list stuff
   Edge *next;
 };
@@ -96,6 +96,21 @@ void add_point(Graph *graph, unsigned int x, unsigned int y) {
   add_vertex(graph, get_id(), x, y);
 }
 
+Point *get_vertex(const Graph *graph, unsigned int id) {
+  for (Point *p = graph->points; p; p = p->next)
+    if (p->name == id)
+      return p;
+  return 0;
+}
+
+short vertex2mmd(const Point *point, FILE *file, short known) {
+  if (known)
+    fprintf(file, "%d", point->name);
+  else
+    fprintf(file, "%d(%d,%d)", point->name, point->x, point->y);
+  return 1;
+}
+
 void graph2mmd(const Graph *graph, FILE *file) {
   if (!graph || !file)
     return; // not my problem then
@@ -105,10 +120,15 @@ void graph2mmd(const Graph *graph, FILE *file) {
   // actual writing
   fprintf(file, "graph TD");
   for (Edge *e = graph->edges; e; e = e->next) {
+    // fetching points
+    Point *pa = get_vertex(graph, e->a);
+    Point *pb = get_vertex(graph, e->b);
+    // writing the line
     fputc('\t', file);
-    // TODO
+    known[pa->name] = vertex2mmd(pa, file, known[pa->name]);
     fprintf(file, " -> ");
-    fputc('\n', file);
+    known[pb->name] = vertex2mmd(pb, file, known[pb->name]);
+    fputc('\n', file); // next one
   }
 }
 
