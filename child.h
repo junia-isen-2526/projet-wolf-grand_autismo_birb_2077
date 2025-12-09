@@ -14,6 +14,6 @@ typedef struct {
 
 int isGameOver(GameStep step, Child child, const Wolf *wolf);
 
-void moveChildStep(const Child *child);
+void moveChildStep(Child *child);
 
 #endif // WOLF__CHILD_H_
