@@ -30,7 +30,7 @@ void del_graph(Graph *graph);
  * @return a new graph made from the file informations.
  * @rep @p file must point to an open JSON file
  */
-Graph *load_graph(FILE file);
+Graph *load_graph(FILE *file);
 
 /**
  * Let the graph know of a "new" point. In case of already
@@ -51,7 +51,7 @@ void add_point(Graph *graph, unsigned int x, unsigned int y);
  * @pre @p graph must be a valid pointer.
  * @pre @p file must be a valid file descriptor to an opened file.
  */
-void graph2mmd(const Graph *graph, FILE file);
+void graph2mmd(const Graph *graph, FILE *file);
 
 /**
  * @param graph
