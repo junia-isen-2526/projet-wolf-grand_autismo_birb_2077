@@ -1,7 +1,7 @@
 #include "child.h"
 
 int isGameOver(const GameStep step, Child child, const Wolf *wolf) {
-  if (wolf->x == child.y && wolf->y == child.x ) { //si la position du loup est la même que la position de l'enfant alors
+  if (wolf->x == child.x && wolf->y == child.y ) { //si la position du loup est la même que la position de l'enfant alors
     child.etat = 0; // l'enfant se mourru
   } else if ( !((child.x >= FOREST_WIDTH || child.y >= FOREST_HEIGHT) || (child.x < 0 || child.y < 0))) { //sinon si l'enfant en dehors de forêt et s'echappe
     child.etat = 0; // enfant se mourru (mais s'est echapper genre il est pas mort pour de vrai)

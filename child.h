@@ -7,8 +7,8 @@
 #define WOLF__CHILD_H_
 
 typedef struct {
-  unsigned int y;
   unsigned int x;
+  unsigned int y;
   unsigned int etat; // 0 = FAUX, 1 = VRAI faut penser à faire attention à qu'il ne va pas au dessus de 1
 } Child;
 
