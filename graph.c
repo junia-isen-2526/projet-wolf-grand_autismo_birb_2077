@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 typedef struct st_point Point;
 
@@ -59,10 +60,43 @@ void del_graph(Graph *graph) {
   free(graph);
 }
 
+// TODO add point parsing function. Non-const pointers are used as outs.
+short parse_point(char str[], int *name, int *x, int *y) {
+  if (strlen(str) == 0)
+    return 0; // there is nothing to parse
+  char *slice = strtok(str, "(,)");
+  *name = atoi(slice);
+  slice = strtok(NULL, "(,)");
+  // TODO check if we have the others
+  if (!slice)
+    return 1; // no inner info to the point
+  *x = atoi(slice);
+  // TODO check y
+  slice = strtok(NULL, "(,)");
+  if (!slice)
+    return 0; // this is not normal
+  *y = atoi(slice);
+  return 1;
+}
+
 Graph *load_graph(FILE *file) {
   if (!file)
     return 0; // not my problem
-  return 0;
+  Graph *graph = mk_graph();
+  // start parsing
+  char *a_str; // inner point infos
+  char *b_str; // inner point infos
+  while (fscanf(file, "%s -> %s\n", a_str, b_str)) {
+    // TODO parse strings
+    if (!(graph->points))
+      add_point(graph, 0, 0); // FIXME parse coordinates
+    if (!is_in_graph(graph, 0, 0)) {
+      del_graph(graph);
+      return 0; // something has gone horribly wrong
+    }
+    // TODO add edges from the graph
+  }
+  return graph;
 }
 
 // unique id generator
@@ -88,6 +122,7 @@ void add_vertex(Graph *graph, unsigned int id, unsigned int x, unsigned int y) {
     p = pp;
   else
     p->next = pp;
+  graph->nb_vertices++;
 }
 
 void add_point(Graph *graph, unsigned int x, unsigned int y) {
@@ -101,6 +136,23 @@ Point *get_vertex(const Graph *graph, unsigned int id) {
     if (p->name == id)
       return p;
   return 0;
+}
+
+void add_edge(Graph *graph, unsigned int ax, unsigned int ay, unsigned int bx,
+              unsigned int by) {
+  if (!graph || (ax == bx && ay == by))
+    return; // silent fail
+  unsigned int a = is_in_graph(graph, ax, ay);
+  if (!a || is_in_graph(graph, bx, by))
+    return; // it's an edge, it must be linked to something
+  add_point(graph, bx, by);
+  Point *b = get_vertex(graph, graph->nb_vertices);
+  // edge creation
+  Edge *e = malloc(sizeof(Edge));
+  e->a = a;
+  e->b = b->name;
+  e->next = 0;
+  // TODO insert edge
 }
 
 short vertex2mmd(const Point *point, FILE *file, short known) {
@@ -132,6 +184,6 @@ void graph2mmd(const Graph *graph, FILE *file) {
   }
 }
 
-short is_in_graph(const Graph *graph, unsigned int x, unsigned int y) {
+int is_in_graph(const Graph *graph, unsigned int x, unsigned int y) {
   return 0;
 }

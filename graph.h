@@ -28,7 +28,9 @@ void del_graph(Graph *graph);
  * points listed in the file.
  * @param file the file descriptor we want to read from.
  * @return a new graph made from the file informations.
- * @rep @p file must point to an open JSON file
+ * @rep @p file must point to an open Mermaid file with content in it.
+ * @warning in case of malformed mermaid file, this will return a null pointer.
+ * You shouldn't bother continuing, this is an aberrant scenario.
  */
 Graph *load_graph(FILE *file);
 
@@ -43,6 +45,17 @@ Graph *load_graph(FILE *file);
  * @pre @p graph must be a valid pointer.
  */
 void add_point(Graph *graph, unsigned int x, unsigned int y);
+
+/**
+ * @param graph
+ * @param ax
+ * @param ay
+ * @param bx
+ * @param by
+ * @pre @p graph
+ */
+void add_edge(Graph *graph, unsigned int ax, unsigned int ay, unsigned int bx,
+              unsigned by);
 
 /**
  * Turning our graph into a mermaid string
@@ -60,7 +73,7 @@ void graph2mmd(const Graph *graph, FILE *file);
  * @return
  * @pre @p graph must be a valid pointer.
  */
-short is_in_graph(const Graph *graph, unsigned int x, unsigned int y);
+int is_in_graph(const Graph *graph, unsigned int x, unsigned int y);
 
 #endif // WOLF_GRAPH__H
 
