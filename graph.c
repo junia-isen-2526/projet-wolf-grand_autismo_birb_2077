@@ -178,7 +178,11 @@ void add_edge(Graph *graph, unsigned int ax, unsigned int ay, unsigned int bx,
   e->a = a;
   e->b = b->name;
   e->next = 0;
-  // TODO insert edge
+  Edge *edge;
+  for (edge = graph->edges; edge; edge = edge->next) {
+    // skiiiiiip
+  }
+  edge->next = e;
 }
 
 short vertex2mmd(const Point *point, FILE *file, short known) {
