@@ -116,11 +116,15 @@ Graph *load_graph(FILE *file) {
     edge->a = a;
     edge->b = b;
     // saving edge to graph
-    Edge *e;
-    for (e = graph->edges; e; e = e->next) {
-      // just a fast skip
+    if (!(graph->edges))
+      graph->edges = edge;
+    else {
+      Edge *e;
+      for (e = graph->edges; e; e = e->next) {
+        // just a fast skip
+      }
+      e->next = edge;
     }
-    e->next = edge;
   }
   return graph;
 }
@@ -179,10 +183,14 @@ void add_edge(Graph *graph, unsigned int ax, unsigned int ay, unsigned int bx,
   e->b = b->name;
   e->next = 0;
   Edge *edge;
-  for (edge = graph->edges; edge; edge = edge->next) {
-    // skiiiiiip
+  if (!(graph->edges))
+    graph->edges = e;
+  else {
+    for (edge = graph->edges; edge; edge = edge->next) {
+      // skiiiiiip
+    }
+    edge->next = e;
   }
-  edge->next = e;
 }
 
 short vertex2mmd(const Point *point, FILE *file, short known) {
