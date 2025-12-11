@@ -60,18 +60,18 @@ void del_graph(Graph *graph) {
   free(graph);
 }
 
-// TODO add point parsing function. Non-const pointers are used as outs.
+// Point parsing function. Non-const pointers are used as outs.
 short parse_point(char str[], int *name, int *x, int *y) {
   if (strlen(str) == 0)
     return 0; // there is nothing to parse
   char *slice = strtok(str, "(,)");
+  if (!slice)
+    return 0; // this is a problem
   *name = atoi(slice);
   slice = strtok(NULL, "(,)");
-  // TODO check if we have the others
   if (!slice)
     return 1; // no inner info to the point
   *x = atoi(slice);
-  // TODO check y
   slice = strtok(NULL, "(,)");
   if (!slice)
     return 0; // this is not normal
@@ -82,19 +82,45 @@ short parse_point(char str[], int *name, int *x, int *y) {
 Graph *load_graph(FILE *file) {
   if (!file)
     return 0; // not my problem
-  Graph *graph = mk_graph();
+  char *line;
+  while (fscanf(file, "%s\n", line)) {
+    // nothing we're just skipping lines
+  }
   // start parsing
-  char *a_str; // inner point infos
-  char *b_str; // inner point infos
-  while (fscanf(file, "%s -> %s\n", a_str, b_str)) {
-    // TODO parse strings
-    if (!(graph->points))
-      add_point(graph, 0, 0); // FIXME parse coordinates
-    if (!is_in_graph(graph, 0, 0)) {
-      del_graph(graph);
-      return 0; // something has gone horribly wrong
+  Graph *graph = mk_graph();
+  while (fscanf(file, "%s\n", line)) {
+    char *pt_str = strtok(line, "\t ->\n");
+    // temp variables
+    int a = 0;
+    int b = 0;
+    do {
+      int name = 0;
+      int x = 0;
+      int y = 0;
+      // parsing point
+      if (parse_point(pt_str, &name, &x, &y)) {
+        if (x != 0 && y != 0)
+          add_point(graph, x, y);
+        // saving point name
+        if (a == 0)
+          a = name;
+        else
+          b = name;
+      }
+      // next token
+      pt_str = strtok(NULL, "\t ->\n");
+    } while (pt_str);
+    // creating the edge
+    Edge *edge = malloc(sizeof(Edge));
+    edge->next = 0;
+    edge->a = a;
+    edge->b = b;
+    // saving edge to graph
+    Edge *e;
+    for (e = graph->edges; e; e = e->next) {
+      // just a fast skip
     }
-    // TODO add edges from the graph
+    e->next = edge;
   }
   return graph;
 }
@@ -185,5 +211,10 @@ void graph2mmd(const Graph *graph, FILE *file) {
 }
 
 int is_in_graph(const Graph *graph, unsigned int x, unsigned int y) {
-  return 0;
+  if (!graph)
+    return 0;
+  for (Point *p = graph->points; p; p = p->next)
+    if (p->x == x && p->y == y)
+      return 1; // found it
+  return 0;     // no such point
 }
