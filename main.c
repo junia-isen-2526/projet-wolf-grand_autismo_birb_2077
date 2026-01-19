@@ -6,6 +6,8 @@
 #include <stdlib.h>
 #include <time.h>
 
+#define FILENAME "wolfie.mmd"
+
 int main() {
   srand(time(NULL));
 
@@ -16,7 +18,7 @@ int main() {
   const int clothesCount = readLines("../ressources/vetements.txt", clothes);
 
   // graph initialisation
-  Graph *g = mk_graph();
+  Graph *graph = mk_graph();
 
   Wolf wolf = {-1, -1, 0};
   Child child;
@@ -40,8 +42,11 @@ int main() {
       moveWolfStep(&wolf);
       break;
     }
-    moveChildStep(&child, g);
+    moveChildStep(&child, graph);
   }
 
+  FILE *mmd_file = fopen(FILENAME, "w");
+  graph2mmd(graph, mmd_file);
+  fclose(mmd_file);
   return 0;
 }
