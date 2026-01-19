@@ -1,5 +1,8 @@
 #include "child.h"
+#include "graph.h"
 #include "wolf.h"
+
+#include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 
@@ -11,6 +14,9 @@ int main() {
 
   char clothes[MAXClothes][MAX_LINE_LENGTH];
   const int clothesCount = readLines("../ressources/vetements.txt", clothes);
+
+  // graph initialisation
+  Graph *g = mk_graph();
 
   Wolf wolf = {-1, -1, 0};
   Child child;
@@ -34,7 +40,7 @@ int main() {
       moveWolfStep(&wolf);
       break;
     }
-    moveChildStep(&child);
+    moveChildStep(&child, g);
   }
 
   return 0;

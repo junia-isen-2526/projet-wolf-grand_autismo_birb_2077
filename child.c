@@ -1,21 +1,31 @@
 #include "child.h"
+#include "graph.h"
 
 int isGameOver(const GameStep step, Child child, const Wolf *wolf) {
-  if (wolf->x == child.x && wolf->y == child.y ) { //si la position du loup est la même que la position de l'enfant alors
-    child.etat = 0; // l'enfant se mourru
-  } else if ( !((child.x >= FOREST_WIDTH || child.y >= FOREST_HEIGHT) || (child.x < 0 || child.y < 0))) { //sinon si l'enfant en dehors de forêt et s'echappe
-    child.etat = 0; // enfant se mourru (mais s'est echapper genre il est pas mort pour de vrai)
+  if (wolf->x == child.x &&
+      wolf->y == child.y) { // si la position du loup est la même que la
+                            // position de l'enfant alors
+    child.etat = 0;         // l'enfant se mourru
+    // TODO return correct step
+  } else if (!((child.x >= FOREST_WIDTH || child.y >= FOREST_HEIGHT) ||
+               (child.x < 0 ||
+                child.y <
+                    0))) { // sinon si l'enfant en dehors de forêt et s'echappe
+    child.etat = 0; // enfant se mourru (mais s'est echapper genre il est pas
+                    // mort pour de vrai)
+    // TODO return correct step
   }
   return step == STEP_WOLF_MOVE;
 }
 
-void moveChildStep(Child *child) {
-  if (child->etat != 1) return; //si l'enfant est mort alors return
-char forestMap[FOREST_HEIGHT][FOREST_WIDTH];
+void moveChildStep(Child *child, Graph *graph) {
+  if (child->etat != 1)
+    return; // si l'enfant est mort alors return
+  char forestMap[FOREST_HEIGHT][FOREST_WIDTH];
 
   // 8 directions autour enfant
   int dx[8] = {-1, 0, 1, -1, 1, -1, 0, 1}; // x
-  int dy[8] = {-1,-1,-1,  0, 0,  1, 1, 1}; // y
+  int dy[8] = {-1, -1, -1, 0, 0, 1, 1, 1}; // y
 
   int chosen = -1;
 
@@ -35,10 +45,19 @@ char forestMap[FOREST_HEIGHT][FOREST_WIDTH];
       chosen = r;
       break;
     }
+
+    if (is_in_graph(graph, nx, ny))
+      continue; // already visited that tile
   }
   // aucune direction libre trouvée
-  if (chosen == -1) return;
+  if (chosen == -1)
+    return;
+  // coords cache
+  int tx = child->x;
+  int ty = child->y;
   // déplacer l’enfant
   child->x += dx[chosen];
   child->y += dy[chosen];
+  // save to graph (we visited that point)
+  add_edge(graph, tx, ty, child->x, child->y);
 }

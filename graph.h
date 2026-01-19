@@ -47,12 +47,12 @@ Graph *load_graph(FILE *file);
 void add_point(Graph *graph, unsigned int x, unsigned int y);
 
 /**
- * @param graph
- * @param ax
- * @param ay
- * @param bx
- * @param by
- * @pre @p graph
+ * @param graph the graph to insert into.
+ * @param ax the x-coordinate of the point to start from.
+ * @param ay the y-coordinate of the point to start from.
+ * @param bx the x-coordinate of the end of the edge.
+ * @param by the y-coordinate of the end of the edge.
+ * @pre @p graph must be a valid pointer towards a graph structure.
  */
 void add_edge(Graph *graph, unsigned int ax, unsigned int ay, unsigned int bx,
               unsigned by);
@@ -67,10 +67,10 @@ void add_edge(Graph *graph, unsigned int ax, unsigned int ay, unsigned int bx,
 void graph2mmd(const Graph *graph, FILE *file);
 
 /**
- * @param graph
- * @param x
- * @param y
- * @return
+ * @param graph the graph to check into.
+ * @param x the x-coordinate of the point to search for.
+ * @param y the y-coordinate of the point to search for.
+ * @return 1 if the point is in the graph, 0 otherwise.
  * @pre @p graph must be a valid pointer.
  */
 int is_in_graph(const Graph *graph, unsigned int x, unsigned int y);
