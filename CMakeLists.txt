@@ -10,4 +10,5 @@ add_executable(wolf main.c
         wolf.h
         child.c
         child.h
-        graph.c)
+        graph.c
+        forest.c)
