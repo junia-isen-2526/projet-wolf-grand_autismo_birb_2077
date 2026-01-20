@@ -19,9 +19,22 @@ int isGameOver(const GameStep step, Child child, const Wolf *wolf) {
 }
 
 void moveChildStep(Child *child, Graph *graph) {
+  if (!child || !graph)
+    return; // pointer issue, there is no child or no graph
+
+  // define child starting point in case it's needed
+  if (child->x == -1 || child->y == -1) {
+    for (int y = 0; y < FOREST_HEIGHT; y++)
+      for (int x = 0; x < FOREST_WIDTH; x++) {
+        if (!(y == 0 || y == FOREST_HEIGHT - 1) &&
+            !(x == 0 || x == FOREST_WIDTH - 1))
+          continue; // not a valid starting spot
+      }
+  }
+
   if (child->etat != 1)
     return; // si l'enfant est mort alors return
-  char forestMap[FOREST_HEIGHT][FOREST_WIDTH];
+  char forestMap[FOREST_HEIGHT][FOREST_WIDTH]; // FIXME wtf ?
 
   // 8 directions autour enfant
   int dx[8] = {-1, 0, 1, -1, 1, -1, 0, 1}; // x

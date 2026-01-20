@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define FILENAME "wolfie.mmd"
+#define FILENAME "mmd/wolfie.mmd"
 
 int main() {
   srand(time(NULL));
@@ -22,6 +22,10 @@ int main() {
 
   Wolf wolf = {-1, -1, 0};
   Child child;
+
+  // avoiding defaults on the kid
+  child.x = -1;
+  child.y = -1;
 
   GameStep step = STEP_COMPTINE;
 
@@ -45,8 +49,13 @@ int main() {
     moveChildStep(&child, graph);
   }
 
+  // saving graph to mermaid file
   FILE *mmd_file = fopen(FILENAME, "w");
   graph2mmd(graph, mmd_file);
   fclose(mmd_file);
+
+  // cleanup phase
+  del_graph(graph);
+
   return 0;
 }
