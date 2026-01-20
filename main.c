@@ -1,4 +1,5 @@
 #include "child.h"
+#include "forest.h"
 #include "graph.h"
 #include "wolf.h"
 
@@ -24,11 +25,14 @@ int main() {
   Graph *graph = mk_graph();
 
   Wolf wolf = {-1, -1, 0};
-  Child child;
 
   // avoiding defaults on the kid
+  Child child;
   child.x = -1;
   child.y = -1;
+
+  // fetching forest (no post-mk checks)
+  Forest *forest = mk_forest(FOREST_FILE);
 
   GameStep step = STEP_COMPTINE;
 
