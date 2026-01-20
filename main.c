@@ -6,7 +6,10 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define FILENAME "mmd/wolfie.mmd"
+// Some constants (notably filenames)
+#define FILENAME "../mmd/wolfie.mmd"
+#define FOREST_FILE                                                            \
+  "../ressources/foret2.txt" // change it for your preferred forest
 
 int main() {
   srand(time(NULL));
