@@ -53,7 +53,7 @@ int main() {
       moveWolfStep(&wolf);
       break;
     }
-    moveChildStep(&child, graph);
+    moveChildStep(&child, graph, forest);
   }
 
   // saving graph to mermaid file
@@ -63,6 +63,7 @@ int main() {
 
   // cleanup phase
   del_graph(graph);
+  del_forest(forest);
 
   return 0;
 }
