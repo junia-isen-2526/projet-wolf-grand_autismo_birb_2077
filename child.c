@@ -27,6 +27,9 @@ void moveChildStep(Child *child, Graph *graph, const Forest *forest) {
   if (child->x == -1 || child->y == -1) {
     for (int y = 0; y < FOREST_HEIGHT; y++)
       for (int x = 0; x < FOREST_WIDTH; x++) {
+        if (is_in_graph(graph, x, y))
+          continue; // already known starting point
+
         if (!(y == 0 || y == FOREST_HEIGHT - 1) &&
             !(x == 0 || x == FOREST_WIDTH - 1))
           continue; // not a valid starting spot

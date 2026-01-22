@@ -22,7 +22,13 @@ int main() {
   const int clothesCount = readLines("../ressources/vetements.txt", clothes);
 
   // graph initialisation
-  Graph *graph = mk_graph();
+  Graph *graph;
+  FILE *file = fopen(FILENAME, "r");
+  if (file) {
+    graph = load_graph(file);
+    fclose(file);
+  } else
+    graph = mk_graph();
 
   Wolf wolf = {-1, -1, 0};
 
